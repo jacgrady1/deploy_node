@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/zertosh/ssr-demo-kit.git"
+    "url": "git://github.com/jacgrady1/deploy_node.git"
   },
   "dependencies": {
     "express": "4.12.3",

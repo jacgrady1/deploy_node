@@ -1,8 +1,8 @@
 var plan = require('flightplan');
 
-var appName = 'hellworld-app';
+var appName = 'helloworld-app';
 var username = 'deploy';
-var startFile = 'bin/www';
+var startFile = 'server/index.js';
 
 var tmpDir = appName+'-' + new Date().getTime();
 
@@ -12,6 +12,7 @@ plan.target('production', [
   {
     host: '123.57.244.149',
     username: username,
+    password: 'LGX262lgx262', // figure out the ssh way
     agent: process.env.SSH_AUTH_SOCK
   },
 //add in another server if you have more than one
@@ -25,8 +26,8 @@ plan.target('production', [
 // run commands on localhost
 plan.local(function(local) {
   // uncomment these if you need to run a build on your machine first
-  // local.log('Run build');
-  // local.exec('gulp build');
+  local.log('Run build');
+  local.exec('npm run build');
 
   local.log('Copy files to remote hosts');
   var filesToCopy = local.exec('git ls-files', {silent: true});
@@ -45,6 +46,8 @@ plan.remote(function(remote) {
 
   remote.log('Reload application');
   remote.sudo('ln -snf ~/' + tmpDir + ' ~/'+appName, {user: username});
+  // remote.exec('cd ' + appName);
+  // remote.exec('npm run web');
   remote.exec('forever stop ~/'+appName+'/'+startFile, {failsafe: true});
   remote.exec('forever start ~/'+appName+'/'+startFile);
 });
